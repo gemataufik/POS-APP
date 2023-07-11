@@ -84,12 +84,12 @@
                                           <td><%= user.role %></td>
                                           <td>
                                             <a href="/users/edit/<%= user.userid %>" class="btn btn-success btn-circle">
-                                              <span class="icon text-white-50">
+                                              <span>
                                                 <i class="fas fa-info-circle"></i>
                                               </span>
                                             </a>
                                             <a class="btn btn-danger btn-circle delete-btn" href="#" data-toggle="modal" data-target="#deleteModal-<%= user.userid %>">
-                                              <span class="icon text-white-50">
+                                              <span >
                                                 <i class="fas fa-trash"></i>
                                               </span>
                                             </a>
@@ -143,14 +143,19 @@
         </div>
         <!-- End of Content Wrapper -->
 
+    <!-- Logout Modal-->
+    <%- include('partials/logoutmodal.ejs') %>
     </div>
+    
     <!-- End of Page Wrapper -->
 
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-<!-- Delete Modal -->
+
+
+
 
 
     <!-- Bootstrap core JavaScript-->

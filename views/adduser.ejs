@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+    <script src="https://kit.fontawesome.com/6ea2cb925f.js" crossorigin="anonymous"></script>
 
     <title>Users</title>
 
@@ -22,8 +23,6 @@
 
     <!-- Custom styles for this page -->
     <link href="/sbadmin/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-
-    <link rel="stylesheet" href="fontawesome/css/all.css">
 
 </head>
 
@@ -46,10 +45,11 @@
           <h1 class="h3 mb-2 text-gray-800">Users</h1>
           <div class="card shadow mb-4">
             <div class="card-header py-3">
-             
-                  <span class="m-0 font-weight-bold text-primary">Form Add</span>
-         
-             
+              <%if(renderFrom === "add") {%>
+                <span class="m-0 font-weight-bold text-primary">Form Add</span>
+                <%} if(renderFrom === "edit") {%>
+                <span class="m-0 font-weight-bold text-primary">Form Edit</span>
+                <% } %>
           </div>
             <div class="card-body">
               <form action="/users/add" method="post">
@@ -58,30 +58,30 @@
                     <div class="mb-3 row">
                       <label for="email" class="col-sm-2 col-form-label">Email</label>
                       <div class="col-sm-10">
-                        <input type="email" class="form-control" id="email" name="email" >
+                        <input type="email" class="form-control" id="email" name="email" value="<%= data.email %>" >
                       </div>
                     </div>
                     <div class="mb-3 row">
                       <label for="name" class="col-sm-2 col-form-label">Name</label>
                       <div class="col-sm-10">
-                        <input type="text" class="form-control" id="name" name="name" >
+                        <input type="text" class="form-control" id="name" name="name" value="<%= data.nama %>" >
                       </div>
                     </div>
                     <div class="mb-3 row">
                       <label for="password" class="col-sm-2 col-form-label">Password</label>
                       <div class="col-sm-10">
-                        <input type="password" class="form-control" id="password" name="password">
+                        <input type="password" class="form-control" id="password" name="password" value="<%= data.password %>">
                       </div>
                     </div>
                     <div class="mb-3 row">
                       <label for="role" class="col-sm-2 col-form-label">Role</label>
                       <div class="col-sm-10">
                         <div class="form-check">
-                          <input class="form-check-input" type="radio" name="role" id="operator" value="operator">
+                          <input class="form-check-input" type="radio" name="role" id="operator" value="operator" value="<%= data.role %>">
                           <label class="form-check-label" for="operator">Operator</label>
                         </div>
                         <div class="form-check">
-                          <input class="form-check-input" type="radio" name="role" id="admin" value="admin" >
+                          <input class="form-check-input" type="radio" name="role" id="admin" value="admin" value="<%= data.admin %>">
                           <label class="form-check-label" for="admin">Admin</label>
                         </div>
                       </div>

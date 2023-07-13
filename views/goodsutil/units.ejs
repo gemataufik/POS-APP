@@ -12,16 +12,16 @@
     <title>Users</title>
 
     <!-- Custom fonts for this template -->
-    <link href="/sbadmin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="../sbadmin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="/sbadmin/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="../sbadmin/css/sb-admin-2.min.css" rel="stylesheet">
 
     <!-- Custom styles for this page -->
-    <link href="/sbadmin/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link href="../sbadmin/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="fontawesome/css/all.css">
 
@@ -33,7 +33,7 @@
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <%- include('partials/sidebar.ejs') %>
+        <%- include('../partials/sidebar.ejs') %>
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
@@ -43,7 +43,7 @@
             <div id="content">
 
                 <!-- Topbar -->
-                <%- include('partials/topbar.ejs') %>
+                <%- include('../partials/topbar.ejs') %>
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
@@ -56,7 +56,7 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <a href="/users/add" class="btn btn-primary btn-icon-split">
+                            <a href="/units/add" class="btn btn-primary btn-icon-split">
                                 <span class="icon text-white-50">
                                   <i class="fa-solid fa-plus"></i>
                                 </span>
@@ -68,22 +68,20 @@
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                       <tr>
-                                        <th>User ID</th>
-                                        <th>Email</th>
+                                        <th>Unit</th>
                                         <th>Name</th>
-                                        <th>Role</th>
+                                        <th>Note</th>
                                         <th>Action</th>
                                       </tr>
                                     </thead>
                                     <tbody>
                                       <% users.forEach(function(user) { %>
                                         <tr>
-                                          <td><%= user.userid %></td>
-                                          <td><%= user.email %></td>
+                                          <td><%= user.unit %></td>
                                           <td><%= user.name %></td>
-                                          <td><%= user.role %></td>
+                                          <td><%= user.note %></td>
                                           <td>
-                                            <a href="/users/edit/<%= user.userid %>" class="btn btn-success btn-circle">
+                                            <a href="/units/edit/<%= user.userid %>" class="btn btn-success btn-circle">
                                               <span>
                                                 <i class="fas fa-info-circle"></i>
                                               </span>
@@ -107,7 +105,7 @@
                                                     </div>
                                                     <div class="modal-footer">
                                                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                      <a id="confirmDelete" href="/users/delete/<%= user.userid %>" class="btn btn-danger">Delete</a>
+                                                      <a id="confirmDelete" href="/units/delete/<%= user.userid %>" class="btn btn-danger">Delete</a>
                                                     </div>
                                                   </div>
                                                 </div>
@@ -118,10 +116,9 @@
                                     </tbody>
                                     <tfoot>
                                       <tr>
-                                        <th>User ID</th>
-                                        <th>Email</th>
+                                        <th>Unit</th>
                                         <th>Name</th>
-                                        <th>Role</th>
+                                        <th>Note</th>
                                         <th>Action</th>
                                       </tr>
                                     </tfoot>
@@ -137,14 +134,14 @@
             <!-- End of Main Content -->
 
             <!-- Footer -->
-            <%- include('partials/footer.ejs') %>
+            <%- include('../partials/footer.ejs') %>
             <!-- End of Footer -->
 
         </div>
         <!-- End of Content Wrapper -->
 
     <!-- Logout Modal-->
-    <%- include('partials/logoutmodal.ejs') %>
+    <%- include('../partials/logoutmodal.ejs') %>
     </div>
     
     <!-- End of Page Wrapper -->
@@ -159,21 +156,21 @@
 
 
     <!-- Bootstrap core JavaScript-->
-    <script src="/sbadmin/vendor/jquery/jquery.min.js"></script>
-    <script src="/sbadmin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../sbadmin/vendor/jquery/jquery.min.js"></script>
+    <script src="../sbadmin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="/sbadmin/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="../sbadmin/vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="/sbadmin/js/sb-admin-2.min.js"></script>
+    <script src="../sbadmin/js/sb-admin-2.min.js"></script>
 
     <!-- Page level plugins -->
-    <script src="/sbadmin/vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="/sbadmin/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="../sbadmin/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="../sbadmin/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
     <!-- Page level custom scripts -->
-    <script src="/sbadmin/js/demo/datatables-demo.js"></script>
+    <script src="../sbadmin/js/demo/datatables-demo.js"></script>
 
 
 
@@ -181,7 +178,7 @@
   $(document).ready(function() {
     $('.delete-btn').click(function() {
       var userId = $(this).data('id');
-      $('#confirmDelete').attr('href', '/users/delete/' + userId);
+      $('#confirmDelete').attr('href', '/units/delete/' + userId);
     });
   });
 </script>

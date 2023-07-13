@@ -1,10 +1,16 @@
 module.exports = {
-    isLoggedIn: function (req, res, next){
-        if(req.session.user){
+    isLoggedIn: (req, res, next) => {
+        if (req.session.user) {
             next()
-        } else{
+        } else {
             res.redirect('/login')
         }
-
+    },
+    isAdmin: (req, res, next) => {
+        if(req.session.user && req.session.user.role == 'admin'){
+            next()
+        }else{
+            res.redirect('/login')
+        }
     }
 }

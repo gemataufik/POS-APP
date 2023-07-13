@@ -48,7 +48,6 @@ module.exports = function (db) {
         req.flash('info', "user doesn't exist")
         return res.redirect('/login')
       }
-      
 
       if (!bcrypt.compareSync(password,  rows[0].password)){ 
         req.flash('info', "password is wrong")
@@ -71,7 +70,7 @@ module.exports = function (db) {
   });
 
   router.get('/',isLoggedIn, function (req, res, next) {
-    res.render('index', { title: 'Express' });
+    res.render('dashboard/index', { title: 'Express' });
   });
 
 

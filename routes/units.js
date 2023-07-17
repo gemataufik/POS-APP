@@ -1,92 +1,133 @@
 var express = require('express');
 var router = express.Router();
 const bcrypt = require('bcrypt')
-const { isLoggedIn, isAdmin } = require('../helpers/util')
 const saltRounds = 10
 
+// disni
 
 module.exports = (pool) => {
-/* GET users listing. */
-
-router.get('/', function (req, res, next) {
+  /* GET users listing. */
+  router.get("/", function (req, res, next) {
+   
+    pool.query("select * from units", (err, data) => {
+      if (err) {
+        console.log(err);
+      }
+      res.render("units/index", {
+        data: data.rows,
+        user: req.session.user,
+        error: req.flash("error"),
+      });
+    });
+  });
   
-  pool.query('SELECT * FROM units', (err, result) => {
-    if (err) {
-      console.error('Error executing query', err);
-      res.render('error', { message: 'Error retrieving users' });
-    } else {
-      res.render('goodsutil/units', { title: 'Express', users: result.rows });
-    }
+
+  router.get("/add", (req, res) => {
+
+    res.render("units/add", {
+      data: {},
+      renderFrom: "add",
+      user: req.session.user,
+      error: req.flash("error"),
+    });
   });
-});
 
 
-router.get('/add', (req, res, next) => {
-  res.render('goodsutil/add', { title: 'Add Data', current: 'user', user: req.session.user })
-})
+  router.post("/add", (req, res) => {
 
-router.post('/add', async (req, res, next) => {
-  try {
-    const { unit,name,note} = req.body
-    
-    let sql = `INSERT INTO units(unit,name,note) VALUES ($1,$2,$3)`
-    const data = await pool.query(sql, [unit,name,note])
-    console.log('Data User Added')
-    // res.json({
-    //   succes:true,
-    //   data: data
-    // })
-    res.redirect('/units')
-    // res.status(200).json({ success: "Data User Added Successfully" });
-  } catch (error) {
-    console.log(error)
-    res.status(500).json({ error: "Error Creating Data User" })
-  }
-})
-
-
-
-router.get('/edit/:userid', async (req, res, next) => {
-  try {
-    const { userid } = req.params
-    const sql = 'SELECT * FROM units WHERE unit = $1';
-    const data = await pool.query(sql, [userid])
-    // console.log(data)
-    res.render('users/edit', { title: 'Edit Data', current: 'user', user: req.session.user, data: data.rows[0] })
-  } catch (error) {
-    console.log(error)
-    res.status(500).json({ error: "Error Getting Data User" })
-  }
-})
-
-router.post('/edit/:userid', async (req, res, next) => {
-  try {
-    const { userid } = req.params;
-    const { email, name, role } = req.body;
-    let sql = `UPDATE units SET , name =$2, text = $3 WHERE unit = $4`
-    await pool.query(sql, [email, name, role, userid]);
-    console.log('Data User Edited');
-    res.redirect('/units');
-  } catch (error) {
-    console.log(error)
-    res.status(500).json({ error: "Error Updating Data User" })
-  }
-})
-
-
-router.get('/delete/:id', function (req, res, next) {
-  var userId = req.params.id;
-
-  pool.query('DELETE FROM units WHERE unit = $1', [userId], (err, result) => {
-    if (err) {
-      console.error('Error executing query', err);
-      res.render('error', { message: 'Error deleting user' });
-    } else {
-      res.redirect('/units'); 
-    }
+    pool.query(
+      "INSERT INTO units(unit, name, note) VALUES ($1, $2, $3)",
+      [req.body.unit, req.body.name, req.body.note],
+     function (err) {
+        if (err) {
+          console.log(err);
+          req.flash("error", err.message);
+          return res.redirect(`/units/add`);
+        }
+        res.redirect("/units");
+      }
+    );
   });
-});
 
 
-return router;
+  router.get("/edit/:id", (req, res) => {
+    const id = req.params.id;
+    const stockAlert = req.session.stockAlert;
+    pool.query("select * from units where unit = $1", [id], (err, item) => {
+      if (err) {
+        console.log(err);
+      }
+      res.render("units/edit", {
+        data: item.rows[0],
+        renderFrom: "edit",
+        user: req.session.user,
+        stockAlert,
+        error: req.flash("error"),
+      });
+    });
+  });
+
+
+  router.post("/edit/:id", (req, res) => {
+    const id = req.params.id;
+    pool.query(
+      "UPDATE units SET unit = $1, name = $2, note = $3 where unit = $4",
+      [req.body.unit, req.body.name, req.body.note, id],
+      function (err) {
+        if (err) {
+          console.error(err);
+          req.flash("error", err.message);
+          res.redirect(`/units/edit/${id}`);
+        } else {
+          res.redirect("/units");
+        }
+      }
+    );
+  });
+
+
+  router.get("/delete/:id", (req, res) => {
+    const id = req.params.id;
+    pool.query("delete from units where unit = $1", [id], (err) => {
+      if (err) {
+        console.log("hapus data Units gagal");
+        req.flash("error", err.message);
+        return res.redirect(`/`);
+      }
+      res.redirect("/units");
+    });
+  });
+
+
+  router.get('/datatable', async (req, res) => {
+    let params = []
+
+    if (req.query.search.value) {
+      params.push(`unit ilike '%${req.query.search.value}%'`)
+    }
+    if(req.query.search.value){
+        params.push(`name ILIKE '%${req.query.search.value}%'`)
+    }
+    if(req.query.search.value){
+        params.push(`note ILIKE '%${req.query.search.value}%'`)
+    }
+    const limit = req.query.length
+    const offset = req.query.start
+    const sortBy = req.query.columns[req.query.order[0].column].data
+    const sortMode = req.query.order[0].dir
+
+    const total = await pool.query(`select count(*) as total from units ${params.length > 0 ? ` where ${params.join(' or ')}` : ''}`)
+    const data = await pool.query(`select * from units ${params.length > 0 ? ` where ${params.join(' or ')}` : ''} order by ${sortBy} ${sortMode} limit ${limit} offset ${offset} `)
+
+    const response = {
+      "draw": Number(req.query.draw),
+      "recordsTotal": total.rows[0].total,
+      "recordsFiltered": total.rows[0].total,
+      "data": data.rows
+    }
+    res.json(response)
+  })
+
+
+  return router;
 }

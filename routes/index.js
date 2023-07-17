@@ -73,7 +73,5 @@ module.exports = function (db) {
     res.render('dashboard/index', { title: 'Express' });
   });
 
-
-
   return router;
 }

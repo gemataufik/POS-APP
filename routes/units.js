@@ -1,9 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const bcrypt = require('bcrypt')
-const saltRounds = 10
 
-// disni
 
 module.exports = (pool) => {
   /* GET users listing. */
